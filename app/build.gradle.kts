@@ -76,5 +76,8 @@ dependencies {
     implementation (libs.kotlinx.coroutines.core) // Ensure the version is correct
     implementation (libs.kotlinx.coroutines.android.v164) // For Android if needed
 
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
 
 }

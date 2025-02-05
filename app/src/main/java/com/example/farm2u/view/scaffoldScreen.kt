@@ -47,7 +47,7 @@ fun ContentScreen(navController: NavController, viewModel: ScaffoldViewModel) {
         0 -> Home(navController)
         1 -> Favourites(navController)
         2 -> ShoppingCart(navController)
-        3 -> Negotiate(navController)
+        3 -> ProfileScreen(navController)
     }
 }
 
@@ -94,7 +94,7 @@ fun Topbar(navController: NavController, viewModel: ScaffoldViewModel) {
                 0 -> Text("Farm2U")
                 1 -> Text("Favourites")
                 2 -> Text("Shopping Cart")
-                3 -> Text("Negotiation")
+                3 -> Text("Profile")
             }
         },
         actions = {

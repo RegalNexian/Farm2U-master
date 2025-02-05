@@ -39,7 +39,7 @@ import com.example.farm2u.view.OrderDetailScreen
 import com.example.farm2u.view.OrderSummaryScreen
 import com.example.farm2u.view.PaymentScreen
 import com.example.farm2u.view.ProductDetailScreen
-import com.example.farm2u.view.Profile
+import com.example.farm2u.view.ProfileScreen
 import com.example.farm2u.view.ScaffoldScreen
 import com.example.farm2u.view.ShoppingCart
 import com.example.farm2u.view.TrackOrderScreen
@@ -79,13 +79,13 @@ fun Nav() {
                 VerificationPage<Any>(navController = navCtrl)
             }
             composable("profile") {
-                Profile(navController = navCtrl)
+                ProfileScreen(navController = navCtrl)
             }
             composable(Screens.FarmerScaffold.route) {
                 FarmerScaffold(navController = navCtrl, viewModel = viewModel())
             }
             composable(Screens.Profile.route) {
-                Profile(navController = navCtrl)
+                ProfileScreen(navController = navCtrl)
             }
             composable("negotiate price") {
                 NegotiatePriceScreen(navController = navCtrl)
@@ -129,7 +129,7 @@ fun Nav() {
             }
 
             composable(Screens.Profile.route) {
-                Profile(navController = navCtrl)
+                ProfileScreen(navController = navCtrl)
             }
             composable("product_detail/{productName}") { backStackEntry ->
                 val productName = backStackEntry.arguments?.getString("productName") ?: ""

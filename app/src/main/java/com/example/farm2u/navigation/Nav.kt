@@ -24,6 +24,7 @@ import com.example.farm2u.view.Crop
 import com.example.farm2u.view.CropDetailScreen
 import com.example.farm2u.view.Farm
 import com.example.farm2u.view.FarmerAdd
+import com.example.farm2u.view.FarmerDetailsScreen
 import com.example.farm2u.view.FarmerNegotiate
 import com.example.farm2u.view.FarmerOrders
 import com.example.farm2u.view.FarmerScaffold
@@ -171,6 +172,21 @@ fun Nav() {
                 val totalPrice = backStackEntry.arguments?.getString("totalPrice")?.toDoubleOrNull() ?: 0.0
                 PaymentScreen(navController = navCtrl, totalPrice)
             }
+
+            composable(
+                route = "farmer_details/{farmerName}/{description}/{previousDeals}",
+                arguments = listOf(
+                    navArgument("farmerName") { type = NavType.StringType },
+                    navArgument("description") { type = NavType.StringType },
+                    navArgument("previousDeals") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val farmerName = backStackEntry.arguments?.getString("farmerName") ?: ""
+                val description = backStackEntry.arguments?.getString("description") ?: ""
+                val previousDeals = backStackEntry.arguments?.getString("previousDeals") ?: ""
+                FarmerDetailsScreen(navController = navCtrl, farmerName, description, previousDeals)
+            }
+
 
 
 

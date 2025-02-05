@@ -1,125 +1,109 @@
 package com.example.farm2u.view
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.farm2u.R
 
-// Sample Farmer Data Model
-data class Farmer(val name: String, val imageRes: Int, var isFavorite: Boolean)
-
-// Sample Farmer List
-val sampleFarmers = listOf(
-    Farmer("John Doe", R.drawable.farmer, true),
-    Farmer("Emma Smith", R.drawable.farmer, false),
-    Farmer("Liam Brown", R.drawable.farmer, true),
-    Farmer("Olivia Johnson", R.drawable.farmer, false),
-    Farmer("William Wilson", R.drawable.farmer, true)
-)
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Favourites(navController: NavController) {
-    var searchQuery by remember { mutableStateOf("") }
+    // Sample farmer list
+    val farmers = listOf(
+        Triple("Ramesh", "Experienced organic farmer from Texas", "Sold 500g of wheat"),
+        Triple("Suresh", "Specialist in rice and maize farming", "Supplied 1kg of maize"),
+        Triple("Mahesh", "Expert in organic vegetable farming", "Supplied 3kg of fresh veggies"),
+        Triple("Khuresh", "Experienced organic farmer from Texas", "Sold 5kg of wheat"),
+        Triple("Syama", "Specialist in rice and maize farming", "Supplied 1kg of maize"),
+        Triple("Rahul", "Expert in organic vegetable farming", "Supplied 3kg of fresh veggies"),
+        Triple("Debadatta", "Experienced organic farmer from Texas", "Sold 5kg of wheat"),
+        Triple("Rabi", "Specialist in rice and maize farming", "Supplied 1kg of maize"),
+        Triple("Mahi", "Expert in organic vegetable farming", "Supplied 3kg of fresh veggies")
+    )
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 70.dp, start = 10.dp, end = 10.dp, bottom = 100.dp)
-    ) { contentPadding ->
-        Column(
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Background image
+        Image(
+            painter = painterResource(id = R.drawable.img_3), // Replace with your actual background image resource
+            contentDescription = "Background Image",
             modifier = Modifier
-                .padding(contentPadding)
                 .fillMaxSize()
-        ) {
-            // Search Bar
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                label = { Text("Search") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+                .align(Alignment.Center) // Ensure the background image fills the entire screen
+        )
+
+        // Main content over the background
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Top Navbar
+            TopAppBar(
+                title = { Text(text = "Favourites") },
+
+            )
+
+            // LazyColumn to make the content scrollable
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                shape = RoundedCornerShape(50.dp)
-            )
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
 
-            Spacer(modifier = Modifier.height(20.dp))
+            ) {
+                item {
+                    // Search bar
+                    TextField(
+                        value = "",
+                        onValueChange = {},
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text(text = "Search farmers...") },
+                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))  // Spacer for better UI
+                }
 
-            // Filtered Favorite List
-            FavList(farmers = sampleFarmers.filter { it.name.contains(searchQuery, ignoreCase = true) })
-        }
-    }
-}
+                // Display farmers
+                items(farmers) { (name, description, previousDeals) ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp)
+                            .clickable {
+                                navController.navigate("farmer_details/$name/$description/$previousDeals")
+                            },
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = CardDefaults.cardElevation(6.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.farmer), // Replace with actual farmer image
+                                contentDescription = "Farmer Image",
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                            )
 
-// Composable to Display List of Favorite Farmers
-@Composable
-fun FavList(farmers: List<Farmer>) {
-    LazyColumn {
-        items(farmers.size) { index ->
-            FavCard(farmer = farmers[index])
-        }
-    }
-}
-
-// Composable to Create a Farmer Card
-@Composable
-fun FavCard(farmer: Farmer) {
-    var isFav by remember { mutableStateOf(farmer.isFavorite) }
-
-    Card(
-        modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth()
-            .height(90.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Farmer Image
-            Image(
-                painter = painterResource(farmer.imageRes),
-                contentDescription = "Farmer Image",
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-
-            // Farmer Name
-            Text(
-                text = farmer.name,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(start = 10.dp)
-            )
-
-            // Favorite Button
-            IconButton(onClick = { isFav = !isFav }) {
-                Icon(
-                    imageVector = Icons.Filled.Favorite,
-                    contentDescription = "Favorite Icon",
-                    tint = if (isFav) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                )
+                            Column {
+                                Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                Text(text = description, fontSize = 14.sp, color = Color.Gray)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

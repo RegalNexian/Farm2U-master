@@ -42,11 +42,12 @@ import com.example.farm2u.view.PaymentScreen
 import com.example.farm2u.view.ProductDetailScreen
 import com.example.farm2u.view.ProfileScreen
 import com.example.farm2u.view.ScaffoldScreen
+import com.example.farm2u.view.UpdateProfileScreen
 import com.example.farm2u.view.ShoppingCart
 import com.example.farm2u.view.TrackOrderScreen
 import com.example.farm2u.view.VerificationPage
 import com.example.farm2u.viewModel.AddItemViewModel
-import com.google.android.engage.shopping.datamodel.ShoppingCart
+
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
@@ -131,6 +132,10 @@ fun Nav() {
 
             composable(Screens.Profile.route) {
                 ProfileScreen(navController = navCtrl)
+            }
+
+            composable("update_profile") {
+                UpdateProfileScreen(navController = navCtrl) // Pass it to the screen
             }
             composable("product_detail/{productName}") { backStackEntry ->
                 val productName = backStackEntry.arguments?.getString("productName") ?: ""

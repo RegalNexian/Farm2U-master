@@ -33,16 +33,17 @@ fun FarmerDetailsScreen(navController: NavController, farmerName: String, descri
     ) { paddingValues ->  // Use paddingValues here for Scaffold content padding
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)  // Add content padding inside the Box
+                .fillMaxSize()  // Fill the entire screen with the Box
+                .padding(paddingValues)  // Ensure content doesn't go under the top bar
         ) {
-            // Background image - no padding around it
+            // Background image - make sure it fills the entire screen
             Image(
                 painter = painterResource(id = R.drawable.img_3), // Replace with your actual background image resource
                 contentDescription = "Background Image",
                 modifier = Modifier
-                    .fillMaxSize()  // Fill the entire screen with the background image
-                    .align(Alignment.Center)
+                    .fillMaxSize()  // Make the image fill the entire screen
+                    .align(Alignment.Center),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
             )
 
             // Larger square Card for all content
@@ -56,9 +57,10 @@ fun FarmerDetailsScreen(navController: NavController, farmerName: String, descri
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(16.dp)  // Padding inside the card
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxSize()  // Let the column take up all available space
+                        .padding(16.dp),  // Padding inside the card
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center // Centering content vertically
                 ) {
                     // Farmer Image
                     Image(

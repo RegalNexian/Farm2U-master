@@ -7,6 +7,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,10 +26,14 @@ import com.example.farm2u.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun UpdateProfileScreen(navController: NavController) {
+    var farmerName by remember { mutableStateOf("John Doe") }
+    var farmerPhone by remember { mutableStateOf("+91 9876543210") }
+    var farmerLocation by remember { mutableStateOf("Pune, India") }
+    var farmerCrops by remember { mutableStateOf("Wheat, Rice") }
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
-    rememberLauncherForActivityResult(
+    val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? -> profileImageUri = uri }
 
@@ -36,7 +41,7 @@ fun ProfileScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Profile", fontSize = 22.sp, fontWeight = FontWeight.Bold) },
+                title = { Text("Update Profile", fontSize = 22.sp, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -57,7 +62,6 @@ fun ProfileScreen(navController: NavController) {
                 modifier = Modifier.size(150.dp),
                 contentAlignment = Alignment.Center
             ) {
-                // Profile Image
                 Image(
                     painter = profileImageUri?.let { rememberAsyncImagePainter(it) }
                         ?: painterResource(R.drawable.farmer),
@@ -69,23 +73,57 @@ fun ProfileScreen(navController: NavController) {
                         .background(Color.LightGray),
                     contentScale = ContentScale.Crop
                 )
+
+                IconButton(
+                    onClick = { imagePickerLauncher.launch("image/*") },
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .align(Alignment.TopEnd)
+                        .padding(4.dp)
+                ) {
+                    Icon(Icons.Default.Edit, contentDescription = "Edit Photo", tint = Color.White)
+                }
             }
 
-            Text("Farmer Name: John Doe", fontSize = 18.sp, fontWeight = FontWeight.Medium)
-            Text("Phone: +91 9876543210", fontSize = 18.sp, fontWeight = FontWeight.Medium)
-            Text("Location: Pune, India", fontSize = 18.sp, fontWeight = FontWeight.Medium)
-            Text("Preferred Crops: Wheat, Rice", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+            OutlinedTextField(
+                value = farmerName,
+                onValueChange = { farmerName = it },
+                label = { Text("Name") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-            // Update Profile Button
+            OutlinedTextField(
+                value = farmerPhone,
+                onValueChange = { farmerPhone = it },
+                label = { Text("Phone Number") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = farmerLocation,
+                onValueChange = { farmerLocation = it },
+                label = { Text("Location") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = farmerCrops,
+                onValueChange = { farmerCrops = it },
+                label = { Text("Preferred Crops") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
             Button(
-                onClick = { navController.navigate("update_profile") },
+                onClick = { navController.popBackStack() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = MaterialTheme.shapes.large
             ) {
-                Text("Update Profile", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("Save Changes", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

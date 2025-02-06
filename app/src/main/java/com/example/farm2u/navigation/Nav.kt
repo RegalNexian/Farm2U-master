@@ -44,6 +44,7 @@ import com.example.farm2u.view.ProfileScreen
 import com.example.farm2u.view.ScaffoldScreen
 import com.example.farm2u.view.ShoppingCart
 import com.example.farm2u.view.TrackOrderScreen
+import com.example.farm2u.view.UpdateProfileScreen
 import com.example.farm2u.view.VerificationPage
 import com.example.farm2u.viewModel.AddItemViewModel
 import com.google.android.engage.shopping.datamodel.ShoppingCart
@@ -81,6 +82,9 @@ fun Nav() {
             }
             composable("profile") {
                 ProfileScreen(navController = navCtrl)
+            }
+            composable("update_profile") {
+                UpdateProfileScreen(navController = navCtrl)
             }
             composable(Screens.FarmerScaffold.route) {
                 FarmerScaffold(navController = navCtrl, viewModel = viewModel())
